@@ -43,7 +43,7 @@ class SupabaseUserRepository extends UserRepository {
         // Buscamos en la tabla 'profiles' que actúa como espejo de Auth
         const { data, error } = await this.supabase
             .from('profiles') 
-            .select('id, status') // Traemos solo lo necesario para optimizar
+            .select('id, status, full_name') // Traemos solo lo necesario para optimizar
             .eq('id', id)
             .single();
 
