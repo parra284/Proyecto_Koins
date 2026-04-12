@@ -1,39 +1,70 @@
-KOINS - Finanzas Inteligentes & Sostenibles 🪙
-KOINS es una solución integral diseñada para revolucionar la gestión financiera personal. A través de la centralización de facturas (electrónicas y manuales) y el análisis basado en Inteligencia Artificial, permitimos a los usuarios tomar el control total de su economía de manera intuitiva, eficiente y, sobre todo, sostenible.
+#  KOINS - Finanzas Inteligentes & Sostenibles 🌿
 
- 
-* Nuestra Propuesta de Valor
-En un mundo digital, el desorden financiero y el desperdicio de papel por facturas físicas generan un impacto negativo tanto en el bolsillo como en el medio ambiente. KOINS nace para:
+> **Revolucionando la gestión financiera personal a través de la IA y la sostenibilidad.**
 
-Digitalizar la economía: Reducción del uso de papel mediante el almacenamiento digital de comprobantes.
+KOINS es una solución integral diseñada para centralizar facturas (electrónicas y manuales) y analizar gastos mediante Inteligencia Artificial. Permitimos a los usuarios tomar el control total de su economía de manera intuitiva, eficiente y, sobre todo, responsable con el medio ambiente.
 
-Centralizar la información: Adiós a las facturas perdidas; todo en un solo lugar.
+---
 
-Asesoría Inteligente: Uso de IA para ofrecer recomendaciones personalizadas basadas en el comportamiento de gasto.
+## Propuesta de Valor
 
- Stack Tecnológico
-Para garantizar una experiencia fluida y escalable, hemos seleccionado tecnologías de vanguardia:
+En un mundo digital, el desorden financiero y el desperdicio de papel generan un impacto negativo. KOINS nace para solucionar esto mediante:
 
-Frontend: React (Web/Mobile) con una arquitectura basada en componentes.
+*   **Digitalización de la Economía:** Adiós al papel; almacenamiento digital de comprobantes.
+*   **Centralización Total:** Todas tus facturas en un solo lugar, sin pérdidas.
+*   **Asesoría Inteligente:** IA aplicada para ofrecer recomendaciones personalizadas según tu comportamiento de gasto.
 
-Comunicación: Integración con APIs RESTful para el consumo de datos en tiempo real.
+---
 
-Resiliencia: Implementación de patrones como el Circuit Breaker para asegurar la disponibilidad del sistema ante fallos en servicios externos.
+##  Stack Tecnológico
 
- Flujos Principales del Sistema
-El sistema ha sido diseñado bajo principios de usabilidad y robustez técnica:
+Seleccionamos tecnologías de vanguardia para garantizar escalabilidad y fluidez:
 
-Acceso y Seguridad (Login/Register): Gestión de identidad de usuario para proteger la información financiera sensible.
+*   **Frontend:** `React` (Web/Mobile) con arquitectura basada en componentes.
+*   **Comunicación:** Consumo de datos en tiempo real mediante `APIs RESTful`.
+*   **Resiliencia:** Patrón `Circuit Breaker` para asegurar la disponibilidad del sistema ante fallos externos.
 
-Gestión de Transacciones: Registro dinámico de ingresos y gastos con categorización automática.
+---
 
-Conectividad y Resiliencia: Consumo de microservicios mediante una API, protegidos por un Circuit Breaker para manejar latencias o caídas de servicios de terceros sin afectar la experiencia del usuario.
+##  Arquitectura y Flujos Principales
 
- Fundamentos de Ingeniería
-Este proyecto no es solo una aplicación, es un sistema construido sobre bases sólidas:
+El sistema prioriza la **usabilidad** y la **robustez técnica**:
 
-Principios SOLID: Garantizamos un código modular y fácil de mantener (SRP, OCP, DIP).
+1.  **Seguridad:** Gestión de identidad (Login/Register) para proteger datos sensibles.
+2.  **Transacciones:** Registro dinámico con **categorización automática** de ingresos y gastos.
+3.  **Conectividad:** Microservicios protegidos para manejar latencias de terceros sin afectar la experiencia del usuario.
 
-Patrones de Diseño: Implementación de Strategy para el parsing de facturas, Observer para actualizaciones en tiempo real y Builder para la creación de objetos financieros complejos.
+---
 
-Atributos de Calidad: Priorizamos la Usabilidad, la Mantenibilidad y la Escalabilidad.
+##  Fundamentos de Ingeniería
+
+KOINS está construido sobre bases sólidas de ingeniería de software:
+
+### Principios SOLID
+Garantizamos un código modular y fácil de mantener aplicando:
+- **SRP** (Single Responsibility Principle)
+- **OCP** (Open/Closed Principle)
+- **DIP** (Dependency Inversion Principle)
+
+###  Patrones de Diseño Implementados
+
+| Patrón | Aplicación en KOINS |
+| :--- | :--- |
+| **Strategy** | Parsing dinámico de diferentes tipos de facturas. |
+| **Observer** | Actualizaciones de saldo y reportes en tiempo real. |
+| **Builder** | Construcción de objetos financieros complejos. |
+
+###  Atributos de Calidad
+- ✅ **Usabilidad:** Interfaz intuitiva centrada en el usuario.
+- ✅ **Mantenibilidad:** Código limpio y documentado.
+- ✅ **Escalabilidad:** Preparado para el crecimiento de usuarios y datos.
+
+---
+
+##  Instalación y Configuración (Próximamente)
+```bash
+# Ejemplo de clonación del repo
+git clone https://github.com
+cd koins-proyecto
+npm install
+npm start
