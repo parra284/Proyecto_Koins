@@ -40,11 +40,10 @@ class SupabaseUserRepository extends UserRepository {
     }
 
     async findById(id) {
-        // Nota: auth.admin requiere el Service Role Key (Ten cuidado con esto)
-        // Lo ideal es buscar en tu tabla pública de 'profiles' o 'users'
+        // Buscamos en la tabla 'profiles' que actúa como espejo de Auth
         const { data, error } = await this.supabase
-            .from('profiles') // Asumiendo que tienes una tabla espejo en public
-            .select('*')
+            .from('profiles') 
+            .select('id, status') // Traemos solo lo necesario para optimizar
             .eq('id', id)
             .single();
 

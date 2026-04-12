@@ -35,6 +35,29 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.get('/validate/:id', async (req, res) => {
+    try {
+        const user = await userRepo.findById(req.params.id);
+        
+        if (!user) {
+            return res.status(404).json({ 
+                exists: false, 
+                message: "El usuario no existe en el sistema" 
+            });
+        }
+
+        // Devolvemos solo lo necesario para el intercambio de información
+        res.json({ 
+            exists: true, 
+            userId: user.id,
+            status: user.status || 'active', // Útil para lógica de negocio
+            full_name: user.full_name
+        });
+    } catch (error) {
+        res.status(500).json({ error: "Error interno al validar usuario" });
+    }
+});
+
 const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
     console.log(`MS Usuarios corriendo en puerto ${PORT}`);
