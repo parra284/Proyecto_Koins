@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 
 // Inyeccion de dependencia
-const UserRepository = require('./repositories/MockUserRepository');
+const UserRepository = require('./repositories/SupabaseUserRepository');
 const userRepo = new UserRepository();
 
 app.get('/all', async (req, res) => {
