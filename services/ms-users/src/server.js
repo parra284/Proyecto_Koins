@@ -25,6 +25,16 @@ app.get('/:id', async (req, res) => {
     }
 });
 
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const result = await userRepo.login(email, password);
+        res.json(result);
+    } catch (error) {
+        res.status(401).json({ error: error.message });
+    }
+});
+
 const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
     console.log(`MS Usuarios corriendo en puerto ${PORT}`);
