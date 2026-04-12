@@ -1,16 +1,12 @@
 const express = require('express');
 const proxy = require('express-http-proxy');
-const { createRemoteJWKSet, jwtVerify } = require('jose');
+const createVerifier = require('./auth-factory');
 require('dotenv').config();
 
 const app = express();
 
 // Configuración de Supabase
-const SUPABASE_PROJECT_URL = process.env.SUPABASE_PROJECT_URL;
-const SUPABASE_JWT_ISSUER = `${SUPABASE_PROJECT_URL}/auth/v1`;
-const JWKS_URL = new URL(`${SUPABASE_JWT_ISSUER}/.well-known/jwks.json`);
-
-const SUPABASE_JWT_KEYS = createRemoteJWKSet(JWKS_URL);
+const verifyJWT = createVerifier();
 
 // --- Middleware de Autenticación ---
 const authMiddleware = async (req, res, next) => {
@@ -23,19 +19,12 @@ const authMiddleware = async (req, res, next) => {
   const token = authHeader.split(' ')[1];
 
   try {
-    // Verificamos el token con las llaves remotas de Supabase
-    const { payload } = await jwtVerify(token, SUPABASE_JWT_KEYS, {
-      issuer: SUPABASE_JWT_ISSUER,
-    });
-
-    // Guardamos la info del usuario (sub, email, etc) en el objeto req
-    // para que el proxy o los servicios puedan usarla si es necesario
+    // La factory nos abstrae de la implementación
+    const { payload } = await verifyJWT(token);
     req.user = payload;
-    
-    next(); // Continuar al microservicio
+    next();
   } catch (error) {
-    console.error('Error verificando JWT:', error.message);
-    return res.status(401).json({ error: 'Token inválido o expirado' });
+    res.status(401).json({ error: 'Invalid token' });
   }
 };
 
@@ -51,7 +40,7 @@ app.use('/transactions', authMiddleware, proxy(process.env.TRANSACTIONS_SERVICE_
   }
 }));
 
-app.use('/users', authMiddleware, proxy(process.env.USERS_SERVICE_URL));
+app.use('/users', proxy(process.env.USERS_SERVICE_URL));
 
 // Ruta de prueba rápida
 app.get('/test-auth', authMiddleware, (req, res) => {
