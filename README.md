@@ -61,10 +61,7 @@ Garantizamos un código modular y fácil de mantener aplicando:
 
 ---
 
-##  Instalación y Configuración (Próximamente)
-```bash
-# Ejemplo de clonación del repo
-git clone https://github.com
-cd koins-proyecto
-npm install
-npm start
+
+
+# Presentación CANVA
+https://canva.link/0bxukml6wdtae8m
