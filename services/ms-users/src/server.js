@@ -1,5 +1,8 @@
 require('dotenv').config();
 const express = require('express');
+const client = require('prom-client');
+const register = new client.Registry();
+client.collectDefaultMetrics({ register });
 const app = express();
 app.use(express.json());
 
@@ -7,22 +10,32 @@ app.use(express.json());
 const UserRepository = require('./repositories/SupabaseUserRepository');
 const userRepo = new UserRepository();
 
-app.get('/all', async (req, res) => {
-    try {
-        const users = await userRepo.getAll();
-        res.json(users);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+// Métrica para contar peticiones (Sirve para ver el tráfico en Grafana)
+const httpRequestsCounter = new client.Counter({
+  name: 'http_requests_total',
+  help: 'Total de peticiones HTTP recibidas',
+  labelNames: ['method', 'route', 'status']
 });
+register.registerMetric(httpRequestsCounter);
 
-app.get('/:id', async (req, res) => {
-    try {
-        const user = await userRepo.findById(req.params.id);
-        res.json(user);
-    } catch (error) {
-        res.status(404).json({ error: "Usuario no encontrado" });
-    }
+// Middleware para registrar cada llamada automáticamente
+app.use((req, res, next) => {
+  // 1. Filtro de seguridad (lo que hablamos antes)
+  const ignorablePaths = ['/metrics', '/favicon.ico'];
+  if (ignorablePaths.includes(req.path)) return next();
+
+  res.on('finish', () => {
+    // 2. Intentamos obtener el patrón de la ruta (ej: /validate/:id)
+    // Si la ruta no existe (404), usamos req.path para saber qué intentaron buscar
+    const route = req.route ? req.route.path : req.path;
+
+    httpRequestsCounter.inc({ 
+      method: req.method, 
+      route: route, // <--- AQUÍ está el truco
+      status: res.statusCode 
+    });
+  });
+  next();
 });
 
 app.post('/login', async (req, res) => {
@@ -56,6 +69,17 @@ app.get('/validate/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: "Error interno al validar usuario" });
     }
+});
+
+// Endpoint para que Prometheus recoja los datos
+app.get('/metrics', async (req, res) => {
+  try {
+    const data = await register.metrics();
+    res.set('Content-Type', register.contentType);
+    res.send(data); // .send maneja mejor los buffers que .end
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
 });
 
 const PORT = process.env.PORT || 3002;

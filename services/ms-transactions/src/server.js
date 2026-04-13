@@ -1,6 +1,9 @@
 const express = require('express');
 const axios = require('axios'); // Librería para comunicación REST
 const axiosRetry = require('axios-retry').default;
+const client = require('prom-client');
+const register = new client.Registry();
+client.collectDefaultMetrics({ register });
 const app = express();
 app.use(express.json());
 
@@ -24,6 +27,35 @@ axiosRetry(axios, {
 // En entornos reales, esto iría en un archivo .env
 // Agrega un valor por defecto si process.env.USUARIOS_MS_URL es undefined
 const USUARIOS_MS_URL = process.env.USUARIOS_MS_URL || 'http://localhost:3002';
+
+// Métrica para contar peticiones (Sirve para ver el tráfico en Grafana)
+const httpRequestsCounter = new client.Counter({
+  name: 'http_requests_total',
+  help: 'Total de peticiones HTTP recibidas',
+  labelNames: ['method', 'route', 'status']
+});
+register.registerMetric(httpRequestsCounter);
+
+// Middleware para registrar cada llamada automáticamente
+app.use((req, res, next) => {
+  // 1. Filtro de seguridad (lo que hablamos antes)
+  const ignorablePaths = ['/metrics', '/favicon.ico'];
+  if (ignorablePaths.includes(req.path)) return next();
+
+  res.on('finish', () => {
+    // 2. Intentamos obtener el patrón de la ruta (ej: /validate/:id)
+    // Si la ruta no existe (404), usamos req.path para saber qué intentaron buscar
+    const route = req.route ? req.route.path : req.path;
+
+    httpRequestsCounter.inc({ 
+      method: req.method, 
+      route: route, // <--- AQUÍ está el truco
+      status: res.statusCode 
+    });
+  });
+  next();
+});
+
 
 app.post('/', async (req, res) => {
   const { monto } = req.body;
@@ -89,6 +121,12 @@ app.get('/', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Error en el servidor de transacciones" });
   }
+});
+
+// Endpoint para que Prometheus recoja los datos
+app.get('/metrics', async (req, res) => {
+  res.setHeader('Content-Type', register.contentType);
+  res.end(await register.metrics());
 });
 
 const PORT = 3001;
