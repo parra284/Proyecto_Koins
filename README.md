@@ -22,7 +22,7 @@ Seleccionamos tecnologías de vanguardia para garantizar escalabilidad y fluidez
 
 *   **Frontend:** `React` (Web/Mobile) con arquitectura basada en componentes.
 *   **Comunicación:** Consumo de datos en tiempo real mediante `APIs RESTful`.
-*   **Resiliencia:** Patrón `Circuit Breaker` para asegurar la disponibilidad del sistema ante fallos externos.
+*   **Resiliencia:** Patrones `Fallback`, `Retry` y `Timeout` para asegurar la disponibilidad del sistema ante fallos externos.
 
 ---
 
