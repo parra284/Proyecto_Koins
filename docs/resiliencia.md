@@ -87,19 +87,19 @@ Esto permite a los clientes del sistema manejar correctamente la situación.
 
 La implementación de estas técnicas aporta varios beneficios al sistema:
 
-**Mayor disponibilidad**
+* **Mayor disponibilidad**
 
 El sistema puede continuar operando incluso cuando algunos servicios presentan fallos temporales.
 
-**Mejor experiencia de usuario**
+* **Mejor experiencia de usuario**
 
 El uso de fallback evita interrupciones completas del servicio.
 
-**Recuperación automática**
+* **Recuperación automática**
 
 El mecanismo de retry permite resolver fallos transitorios sin intervención manual.
 
-**Control de latencia**
+* **Control de latencia**
 
 Los timeouts evitan bloqueos prolongados en el flujo de procesamiento.
 
